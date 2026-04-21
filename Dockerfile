@@ -8,11 +8,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://mirror.arvancloud.ir/ubuntu/|g' /etc/apt/sources.list && \
     sed -i 's|http://security.ubuntu.com/ubuntu/|http://mirror.arvancloud.ir/ubuntu/|g' /etc/apt/sources.list
 
-# ۳. آپدیت و نصب پیش‌نیازها با سرعت بالا از داخل شبکه ایران
-RUN apt-get update && apt-get install -y ca-certificates tzdata && rm -rf /var/lib/apt/lists/*
+# ۳. آپدیت و نصب پیش‌نیازها + wget برای دانلود فایل
+RUN apt-get update && apt-get install -y ca-certificates tzdata wget && rm -rf /var/lib/apt/lists/*
 
-# ۴. کپی کردن فایل فشرده پنل (که از قبل دانلود کردی) به داخل سرور
-COPY x-ui-linux-amd64.tar.gz /tmp/
+# ۴. دانلود فایل فشرده پنل مستقیم از GitHub Release
+RUN wget -O /tmp/x-ui-linux-amd64.tar.gz \
+    https://github.com/hamed00019/3xui-off/releases/download/1.1/x-ui-linux-amd64.tar.gz
 
 # ۵. استخراج فایل‌ها و دادن دسترسی اجرایی
 RUN mkdir -p /usr/local/x-ui \
